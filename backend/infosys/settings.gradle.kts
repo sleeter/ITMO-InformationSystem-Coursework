@@ -1,1 +1,1 @@
-rootProject.name = 'infosys'
+rootProject.name = "infosys"
