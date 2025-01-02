@@ -1,20 +1,29 @@
+CREATE TABLE IF NOT EXISTS roles -- админ, доставщик, сотрудник
+(
+    id bigserial primary key,
+    name varchar(30) not null
+);
+CREATE TABLE IF NOT EXISTS status -- в пвз, выдан клиенту, вернут в пвз, вернут продавцу
+(
+    id bigserial primary key,
+    name varchar(30) not null
+);
 CREATE TABLE IF NOT EXISTS pickup_points
 (
     id bigserial primary key,
     address varchar(50) not null,
     capacity int not null,
-    size bigint not null, -- add trigger
-    status varchar(30) not null
+    size bigint default 0 -- add trigger
 );
 CREATE TABLE IF NOT EXISTS users (
     id bigserial primary key,
     login varchar(50) not null unique,
     password varchar(100) not null,
-    role varchar(50) not null,
+    role_id bigint references roles(id),
     name varchar(30) not null,
     pickup_points_id bigint references pickup_points(id),
     deleted boolean not null
-    );
+);
 CREATE TABLE IF NOT EXISTS customers
 (
     id bigserial primary key,
@@ -40,7 +49,7 @@ CREATE TABLE IF NOT EXISTS orders
     customers_id bigint references customers(id),
     size bigint not null,
     date timestamp not null, -- add trigger
-    status varchar(30) not null,
+    status_id bigint references status(id),
     pickup_points_id bigint references pickup_points(id),
     total_price decimal not null,
     description varchar(255),
