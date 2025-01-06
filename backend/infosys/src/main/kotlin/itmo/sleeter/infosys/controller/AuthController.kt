@@ -1,7 +1,7 @@
 package itmo.sleeter.infosys.controller
 
 import itmo.sleeter.infosys.dto.request.LoginRequest
-import itmo.sleeter.infosys.dto.request.RegisterRequest
+import itmo.sleeter.infosys.dto.request.UserRequest
 import itmo.sleeter.infosys.dto.response.TokenResponse
 import itmo.sleeter.infosys.service.UserService
 import jakarta.validation.Valid
@@ -22,7 +22,7 @@ class AuthController(private val userService: UserService) {
     }
 
     @PostMapping("/register")
-    fun register(@RequestBody @Valid req: RegisterRequest): ResponseEntity<TokenResponse> {
+    fun register(@RequestBody @Valid req: UserRequest): ResponseEntity<TokenResponse> {
         val token = userService.register(req)
         return ResponseEntity.ok(token)
     }

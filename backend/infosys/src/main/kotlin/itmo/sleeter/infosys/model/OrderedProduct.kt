@@ -14,11 +14,11 @@ class OrderedProduct {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orders_id")
-    var orders: Order? = null
+    var order: Order? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "products_id")
-    var products: Product? = null
+    var product: Product? = null
 
     @NotNull
     @Column(name = "count", nullable = false)

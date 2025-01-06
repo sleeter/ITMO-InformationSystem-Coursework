@@ -1,25 +1,25 @@
 package itmo.sleeter.infosys.controller
 
-import itmo.sleeter.infosys.dto.request.RegisterRequest
-import itmo.sleeter.infosys.dto.response.UserCreateResponse
+import itmo.sleeter.infosys.dto.response.CompareUsersResponse
+import itmo.sleeter.infosys.dto.response.UserResponse
 import itmo.sleeter.infosys.service.UserService
-import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/admin")
+@PreAuthorize("hasRole('ROLE_admin')")
 class AdminController(
     private val userService: UserService,
 ) {
+    @GetMapping("/employee/edit")
+    fun getUpdateEmployee(): ResponseEntity<List<CompareUsersResponse>> {
+        return ResponseEntity.ok(userService.getUpdateUsers())
+    }
 
-    @PostMapping("/new-employee")
-    @PreAuthorize("hasRole('ROLE_admin')")
-    fun addNewEmployee(@RequestBody @Valid req: RegisterRequest): ResponseEntity<UserCreateResponse> {
-        return ResponseEntity.ok(userService.createUser(req))
+    @PutMapping("/employee/edit/{id}")
+    fun updateEmployee(@PathVariable id: Long, @RequestParam approved: Boolean): ResponseEntity<UserResponse> {
+        return ResponseEntity.ok(userService.approveUpdate(id, approved))
     }
 }

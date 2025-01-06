@@ -46,6 +46,6 @@ class Order {
     @JoinColumn(name = "payments_id")
     var payments: Payment? = null
 
-    @OneToMany(mappedBy = "orders")
+    @OneToMany(mappedBy = "order")
     var orderedProducts: MutableSet<OrderedProduct> = mutableSetOf()
 }

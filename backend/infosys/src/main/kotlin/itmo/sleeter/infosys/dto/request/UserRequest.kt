@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
 
-data class RegisterRequest(
+data class UserRequest(
     @NotEmpty
     val login: String,
     @NotBlank

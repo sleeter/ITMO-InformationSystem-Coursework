@@ -31,6 +31,6 @@ class Product {
     @JoinColumn(name = "category_id")
     var category: Category? = null
 
-    @OneToMany(mappedBy = "products")
+    @OneToMany(mappedBy = "product")
     var orderedProducts: MutableSet<OrderedProduct> = mutableSetOf()
 }

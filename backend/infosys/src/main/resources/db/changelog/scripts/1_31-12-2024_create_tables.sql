@@ -24,11 +24,20 @@ CREATE TABLE IF NOT EXISTS users (
     pickup_points_id bigint references pickup_points(id),
     deleted boolean not null
 );
+CREATE TABLE IF NOT EXISTS users_updates (
+    id bigint primary key,
+    login varchar(50) not null unique,
+    password varchar(100) not null,
+    role_id bigint references roles(id),
+    name varchar(30) not null,
+    pickup_points_id bigint references pickup_points(id),
+    approved varchar(30) not null
+);
 CREATE TABLE IF NOT EXISTS customers
 (
     id bigserial primary key,
     name varchar(30) not null,
-    email varchar(50) unique not null, -- b-tree index
+    email varchar(50) unique not null,
     age int not null,
     phone_number varchar(30) not null
 );
@@ -48,7 +57,7 @@ CREATE TABLE IF NOT EXISTS orders
     id bigserial primary key,
     customers_id bigint references customers(id),
     size bigint not null,
-    date timestamp not null, -- add trigger
+    date timestamp not null,
     status_id bigint references status(id),
     pickup_points_id bigint references pickup_points(id),
     total_price decimal not null,
@@ -66,11 +75,10 @@ CREATE TABLE IF NOT EXISTS products
 CREATE TABLE IF NOT EXISTS ordered_products
 (
     id bigserial primary key,
-    orders_id bigint references orders(id), -- b-tree index
-    products_id bigint references products(id),
+    order_id bigint references orders(id), -- b-tree index
+    product_id bigint references products(id),
     count int not null,
-    unique (orders_id, products_id)
+    unique (order_id, product_id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_customers_email ON customers(email);
-CREATE INDEX IF NOT EXISTS idx_ordered_products_orders_id ON ordered_products(orders_id);
+CREATE INDEX IF NOT EXISTS idx_ordered_products_orders_id ON ordered_products(order_id);
