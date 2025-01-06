@@ -22,7 +22,7 @@ class JwtService(val props: JwtProperties) {
         val claims: MutableMap<String, Any> = HashMap()
         if (userDetails is User) {
             claims["id"] = userDetails.id!!
-            claims["role"] = userDetails.role?.name!!
+            claims["role"] = "ROLE_${userDetails.role?.name!!}"
         }
         return generateToken(claims, userDetails)
     }

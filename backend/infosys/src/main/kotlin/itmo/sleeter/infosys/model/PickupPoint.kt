@@ -26,9 +26,9 @@ class PickupPoint {
     @Column(name = "size")
     var size: Long? = null
 
-    @OneToMany(mappedBy = "pickupPoints")
+    @OneToMany(mappedBy = "pickupPoint")
     var orders: MutableSet<Order> = mutableSetOf()
 
-    @OneToMany(mappedBy = "pickupPoints")
+    @OneToMany(mappedBy = "pickupPoint")
     var users: MutableSet<User> = mutableSetOf()
 }

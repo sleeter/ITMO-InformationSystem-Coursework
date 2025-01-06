@@ -27,7 +27,7 @@ class User : UserDetails {
     @Column(name = "password", nullable = false, length = 100)
     private var password: String? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     var role: Role? = null
 
@@ -38,14 +38,14 @@ class User : UserDetails {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pickup_points_id")
-    var pickupPoints: PickupPoint? = null
+    var pickupPoint: PickupPoint? = null
 
     @NotNull
     @Column(name = "deleted", nullable = false)
     var deleted: Boolean? = false
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf(SimpleGrantedAuthority(role!!.name))
+        return mutableListOf(SimpleGrantedAuthority("ROLE_${role!!.name}"))
     }
 
     override fun getPassword(): String? {

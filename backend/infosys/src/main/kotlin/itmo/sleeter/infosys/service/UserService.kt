@@ -3,6 +3,7 @@ package itmo.sleeter.infosys.service
 import itmo.sleeter.infosys.dto.request.LoginRequest
 import itmo.sleeter.infosys.dto.request.RegisterRequest
 import itmo.sleeter.infosys.dto.response.TokenResponse
+import itmo.sleeter.infosys.dto.response.UserCreateResponse
 import itmo.sleeter.infosys.mapper.UserMapper
 import itmo.sleeter.infosys.model.User
 import itmo.sleeter.infosys.repository.RoleRepository
@@ -14,16 +15,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.lang.Long.valueOf
-
-val ADMIN_ID = valueOf(0)
-val EMPLOYEE_ID = valueOf(1)
-
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
     private val roleRepository: RoleRepository,
+    private val pickupPointService: PickupPointService,
     private val userMapper: UserMapper,
     private val jwtService: JwtService,
     private val passwordEncoder: PasswordEncoder,
@@ -39,9 +36,9 @@ class UserService(
         val user = User()
         user.login = req.login
         user.setPassword(passwordEncoder.encode(req.password))
-        user.role = if (req.role == "admin") roleRepository.findById(ADMIN_ID).get() else roleRepository.findById(EMPLOYEE_ID).get()
+        user.role = if (req.role == "admin") roleRepository.findById(0).get() else roleRepository.findById(1).get()
         user.name = req.name
-        // TODO: pick_up_point_id
+        user.pickupPoint = if (req.pickUpPointId != null) pickupPointService.getPickupPointById(req.pickUpPointId) else null
         user.deleted = req.deleted
         createUser(user)
         val jwt = jwtService.generateToken(user)
@@ -56,7 +53,17 @@ class UserService(
         val jwt = jwtService.generateToken(user)
         return TokenResponse(jwt)
     }
-
+    fun createUser(req: RegisterRequest) : UserCreateResponse {
+        val user = User()
+        user.login = req.login
+        user.setPassword(passwordEncoder.encode(req.password))
+        user.role = if (req.role == "admin") roleRepository.findById(0).get() else roleRepository.findById(1).get()
+        user.name = req.name
+        user.pickupPoint = if (req.pickUpPointId != null) pickupPointService.getPickupPointById(req.pickUpPointId) else null
+        user.deleted = req.deleted
+        createUser(user)
+        return userMapper.userToUserCreateResponse(user)
+    }
     fun userSave(user: User) : User = userRepository.save(user)
     fun createUser(user: User) : User {
         if (userRepository.existsByLogin(user.login!!)) {

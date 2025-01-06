@@ -32,7 +32,7 @@ class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pickup_points_id")
-    var pickupPoints: PickupPoint? = null
+    var pickupPoint: PickupPoint? = null
 
     @NotNull
     @Column(name = "total_price", nullable = false)
