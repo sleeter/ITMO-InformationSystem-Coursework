@@ -33,4 +33,8 @@ class Product {
 
     @OneToMany(mappedBy = "product")
     var orderedProducts: MutableSet<OrderedProduct> = mutableSetOf()
+
+    @NotNull
+    @Column(name = "price", nullable = false)
+    var price: Long? = null
 }

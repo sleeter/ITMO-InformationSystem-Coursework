@@ -31,6 +31,7 @@ class UserController(
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_admin')")
     fun deleteEmployee(@PathVariable id: Long): ResponseEntity<UserResponse> {
         return ResponseEntity.ok(userService.deleteUser(id))
     }

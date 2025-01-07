@@ -10,11 +10,12 @@ import java.time.Instant
 @Table(name = "orders")
 class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_id_gen")
+    @SequenceGenerator(name = "orders_id_gen", sequenceName = "orders_id_seq", allocationSize = 1)
     @Column(name = "id", nullable = false)
     var id: Long? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customers_id")
     var customers: Customer? = null
 
@@ -26,11 +27,11 @@ class Order {
     @Column(name = "date", nullable = false)
     var date: Instant? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id")
     var status: Status? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pickup_points_id")
     var pickupPoint: PickupPoint? = null
 
@@ -38,12 +39,8 @@ class Order {
     @Column(name = "total_price", nullable = false)
     var totalPrice: BigDecimal? = null
 
-    @Size(max = 255)
-    @Column(name = "description")
-    var description: String? = null
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payments_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "payment_id")
     var payments: Payment? = null
 
     @OneToMany(mappedBy = "order")

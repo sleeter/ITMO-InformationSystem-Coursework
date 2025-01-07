@@ -61,14 +61,14 @@ CREATE TABLE IF NOT EXISTS orders
     status_id bigint references status(id),
     pickup_points_id bigint references pickup_points(id),
     total_price decimal not null,
-    description varchar(255),
-    payments_id bigint references payments(id)
+    payment_id bigint references payments(id)
 );
 CREATE TABLE IF NOT EXISTS products
 (
     id bigserial primary key,
     name varchar(30) not null,
     size bigint not null,
+    price bigint not null,
     description varchar(255) not null,
     category_id bigint references category(id)
 );
