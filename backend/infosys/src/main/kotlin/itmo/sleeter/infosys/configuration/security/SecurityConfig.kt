@@ -50,6 +50,7 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeRequests {
+                AUTH_WHITELIST.forEach { authorize("/$it", permitAll) }
                 authorize("/auth/*", permitAll)
                 authorize(anyRequest, authenticated)
             }

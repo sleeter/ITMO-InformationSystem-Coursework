@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ITMO-InformationSystem-Coursework.iml" filepath="$PROJECT_DIR$/.idea/ITMO-InformationSystem-Coursework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/infosys.main.iml" filepath="$PROJECT_DIR$/.idea/modules/infosys.main.iml" />
     </modules>
   </component>
 </project>
