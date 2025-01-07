@@ -1,7 +1,7 @@
 package itmo.sleeter.infosys.controller
 
-import itmo.sleeter.infosys.dto.response.ProductResponse
-import itmo.sleeter.infosys.service.ProductService
+import itmo.sleeter.infosys.dto.response.PickupPointResponse
+import itmo.sleeter.infosys.service.PickupPointService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/product")
-class ProductController(
-    private val productService: ProductService
+@RequestMapping("/api/pickup-point")
+class PickupPointController(
+    private val pickupPointService: PickupPointService
 ) {
     @GetMapping
-    fun getProducts(
+    fun getPickupPoints(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
-    ) : ResponseEntity<Page<ProductResponse>> {
+    ): ResponseEntity<Page<PickupPointResponse>> {
         val pageable: Pageable = PageRequest.of(page, size)
-        return ResponseEntity.ok(productService.getProducts(pageable))
+        return ResponseEntity.ok(pickupPointService.getPickupPoints(pageable))
     }
 }

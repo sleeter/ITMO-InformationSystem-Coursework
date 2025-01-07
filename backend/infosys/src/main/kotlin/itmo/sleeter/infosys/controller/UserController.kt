@@ -4,6 +4,9 @@ import itmo.sleeter.infosys.dto.request.UserRequest
 import itmo.sleeter.infosys.dto.response.UserResponse
 import itmo.sleeter.infosys.service.UserService
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -14,8 +17,12 @@ class UserController(
     private val userService: UserService
 ) {
     @GetMapping
-    fun getEmployees(): ResponseEntity<List<UserResponse>> {
-        return ResponseEntity.ok(userService.getUsers())
+    fun getEmployees(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
+    ): ResponseEntity<Page<UserResponse>> {
+        val pageable: Pageable = PageRequest.of(page, size)
+        return ResponseEntity.ok(userService.getUsers(pageable))
     }
 
     @PostMapping

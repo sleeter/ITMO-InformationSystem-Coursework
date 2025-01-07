@@ -13,6 +13,9 @@ import itmo.sleeter.infosys.repository.UserRepository
 import itmo.sleeter.infosys.repository.UserUpdateRepository
 import jakarta.persistence.EntityExistsException
 import jakarta.persistence.EntityNotFoundException
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -69,9 +72,13 @@ class UserService(
         createUser(user)
         return userMapper.userToUserResponse(user)
     }
-    fun getUsers(): List<UserResponse> {
-        return userRepository.findAll().filter { it -> it.role?.id!! == valueOf(1) && !it.deleted!! }.map { it -> userMapper.userToUserResponse(it) }
+    fun getUsers(pageable: Pageable): Page<UserResponse> {
+        val usersPage = userRepository.findAllByRoleIdAndDeletedFalse(1, pageable)
+        val userResponses = usersPage.content.map { userMapper.userToUserResponse(it) }
+
+        return PageImpl(userResponses, pageable, usersPage.totalElements)
     }
+
     fun updateUser(id: Long, req: UserRequest) {
         val updateUser = UserUpdate()
         updateUser.id = id
@@ -105,20 +112,30 @@ class UserService(
         user.deleted = true
         return userMapper.userToUserResponse(userRepository.save(user))
     }
-    fun getUpdateUsers(): List<CompareUsersResponse> {
-        val updates = userUpdateRepository.findAll().filter { it -> it.approved!! == "not approved" }
-        val users = userRepository.findAll().filter { it -> it.role?.id!! == valueOf(1) && !it.deleted!! }
-        val userIds = users.map { it.id }.toSet()
-        val filteredUpdates = updates.filter { it.id in userIds }
+    fun getUpdateUsers(pageable: Pageable): Page<CompareUsersResponse> {
+        val updates = userUpdateRepository.findAllByApproved("not approved", pageable)
+        val users = userRepository.findAllByRoleIdAndDeletedFalse(1, pageable)
 
-        if (users.isEmpty() || filteredUpdates.isEmpty()) {
-            return emptyList()
+        if (users.isEmpty || updates.isEmpty) {
+            return Page.empty()
         }
 
-        val answ = users.map { it1 -> CompareUsersResponse(userMapper.userToUserResponse(it1) , userMapper.userToUserUpdateResponse(filteredUpdates.find { it2 -> it1.id == it2.id }!!)) }
+        val userIds = users.content.map { it.id }.toSet()
+        val filteredUpdates = updates.content.filter { it.id in userIds }
 
-        return answ
+        val responses = users.content.mapNotNull { user ->
+            val update = filteredUpdates.find { it.id == user.id }
+            update?.let {
+                CompareUsersResponse(
+                    userMapper.userToUserResponse(user),
+                    userMapper.userToUserUpdateResponse(update)
+                )
+            }
+        }
+
+        return PageImpl(responses, pageable, users.totalElements)
     }
+
     fun userSave(user: User) : User = userRepository.save(user)
     fun createUser(user: User) : User {
         if (userRepository.existsByLogin(user.login!!)) {

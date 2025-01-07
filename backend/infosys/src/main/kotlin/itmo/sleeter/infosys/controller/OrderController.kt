@@ -3,6 +3,9 @@ package itmo.sleeter.infosys.controller
 import itmo.sleeter.infosys.dto.request.OrderRequest
 import itmo.sleeter.infosys.dto.response.OrderResponse
 import itmo.sleeter.infosys.service.OrderService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
@@ -25,7 +28,11 @@ class OrderController(
     }
 
     @GetMapping
-    fun getOrders(): ResponseEntity<List<OrderResponse>> {
-        return ResponseEntity.ok(orderService.getOrders())
+    fun getOrders(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
+    ): ResponseEntity<Page<OrderResponse>> {
+        val pageable: Pageable = PageRequest.of(page, size)
+        return ResponseEntity.ok(orderService.getOrders(pageable))
     }
 }

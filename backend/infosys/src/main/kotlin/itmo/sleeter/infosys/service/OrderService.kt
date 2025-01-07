@@ -10,6 +10,9 @@ import itmo.sleeter.infosys.mapper.ProductMapper
 import itmo.sleeter.infosys.model.Order
 import itmo.sleeter.infosys.repository.OrderRepository
 import org.apache.coyote.BadRequestException
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.lang.Long.valueOf
 import java.time.Instant
@@ -64,8 +67,8 @@ class OrderService(
         order.status = status
         orderRepository.save(order)
     }
-    fun getOrders(): List<OrderResponse> {
-        return orderRepository.findAll().map { order ->
+    fun getOrders(pageable: Pageable): Page<OrderResponse> {
+        val page = orderRepository.findAll(pageable).map { order ->
             val opr = mutableListOf<OrderedProductResponse>()
             order.orderedProducts.forEach { product ->
                 opr.add(productMapper.productToOrderedProductResponse(productMapper.productToProductResponse(product.product!!), product.count!!))
@@ -77,5 +80,6 @@ class OrderService(
                 opr
             )
         }
+        return PageImpl(page.content, pageable, page.totalElements)
     }
 }

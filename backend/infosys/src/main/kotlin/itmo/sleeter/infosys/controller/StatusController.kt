@@ -1,7 +1,7 @@
 package itmo.sleeter.infosys.controller
 
-import itmo.sleeter.infosys.dto.response.ProductResponse
-import itmo.sleeter.infosys.service.ProductService
+import itmo.sleeter.infosys.dto.response.StatusResponse
+import itmo.sleeter.infosys.service.StatusService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/product")
-class ProductController(
-    private val productService: ProductService
-) {
+@RequestMapping("api/status")
+class StatusController(
+    private val service: StatusService
+){
     @GetMapping
-    fun getProducts(
+    fun getStatuses(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
-    ) : ResponseEntity<Page<ProductResponse>> {
+    ): ResponseEntity<Page<StatusResponse>> {
         val pageable: Pageable = PageRequest.of(page, size)
-        return ResponseEntity.ok(productService.getProducts(pageable))
+        return ResponseEntity.ok(service.getStatuses(pageable))
     }
 }
