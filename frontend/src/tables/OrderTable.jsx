@@ -63,6 +63,7 @@ const OrderTable = () => {
                         <th>Date</th>
                         <th>Status</th>
                         <th>Total price</th>
+                        <th>Payment method</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -71,9 +72,10 @@ const OrderTable = () => {
                             <td>{order.id}</td>
                             <td>{order.customer.name}</td>
                             <td>{order.size}</td>
-                            <td>{order.date}</td>
+                            <td>{new Date(order.date).toISOString().slice(0, 16).replace('T', ' ')}</td>
                             <td>{order.status}</td>
                             <td>{order.totalPrice}</td>
+                            <td>{order.payment}</td>
                         </tr>
                     ))}
                     </tbody>

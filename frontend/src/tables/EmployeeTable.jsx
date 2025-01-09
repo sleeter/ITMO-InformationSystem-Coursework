@@ -61,7 +61,7 @@ const EmployeeTable = () => {
                         <th>Login</th>
                         <th>Name</th>
                         <th>Role</th>
-                        <th>Pick up point id</th>
+                        {/*<th>Pick up point id</th>*/}
                     </tr>
                     </thead>
                     <tbody>
@@ -71,7 +71,7 @@ const EmployeeTable = () => {
                             <td>{user.login}</td>
                             <td>{user.name}</td>
                             <td>{user.role}</td>
-                            <td>{user.pick_up_point_id}</td>
+                            {/*<td>{user.pick_up_point_id}</td>*/}
                         </tr>
                     ))}
                     </tbody>

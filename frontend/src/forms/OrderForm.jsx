@@ -20,14 +20,18 @@ const OrderForm = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                setOptions(data.content); // Обновляем состояние options
+                // console.log(data)
+                setOptions(data); // Ensure it's always an array
             } else {
                 console.error('Failed to fetch products');
+                setOptions([]); // Reset options to an empty array on failure
             }
         } catch (error) {
             console.error('Error:', error);
+            setOptions([]); // Reset options to an empty array on error
         }
     };
+
 
     // Состояние для строк формы
     const [rows, setRows] = useState([]);
@@ -142,22 +146,23 @@ const OrderForm = () => {
                         <select
                             value={row.selectedOption}
                             onChange={(e) => handleSelectChange(e, index)}
-                            style={{ marginRight: '10px' }}
+                            style={{marginRight: '10px'}}
                         >
                             <option value="">Select an option</option>
-                            {options.map((option, i) => (
+                            {options.map((option, i) => ( // Ensure options is always an array
                                 <option key={i} value={option.id}>
                                     {option.name}
                                 </option>
                             ))}
                         </select>
 
+
                         <input
                             type="number"
                             value={row.quantity}
                             onChange={(e) => handleQuantityChange(e, index)}
                             min="1"
-                            style={{ marginRight: '10px', width: '80px' }}
+                            style={{marginRight: '10px', width: '80px'}}
                         />
 
                         <button type="button" onClick={() => removeRow(index)}>-</button>
