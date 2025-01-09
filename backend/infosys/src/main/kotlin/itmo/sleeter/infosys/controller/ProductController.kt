@@ -18,10 +18,7 @@ class ProductController(
 ) {
     @GetMapping
     fun getProducts(
-        @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "10") size: Int,
-    ) : ResponseEntity<Page<ProductResponse>> {
-        val pageable: Pageable = PageRequest.of(page, size)
-        return ResponseEntity.ok(productService.getProducts(pageable))
+    ) : ResponseEntity<List<ProductResponse>> {
+        return ResponseEntity.ok(productService.getProducts())
     }
 }
