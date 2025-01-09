@@ -17,8 +17,8 @@ class PaymentService(
     fun getPayment(id: Long): Payment {
         return paymentRepository.findById(id).get()
     }
-    fun getPayments(pageable: Pageable): Page<PaymentResponse> {
-        val page = paymentRepository.findAll(pageable).map { paymentMapper.paymentToPaymentResponse(it) }
-        return PageImpl(page.content, pageable, page.totalElements)
+    fun getPayments(): List<PaymentResponse> {
+        val res = paymentRepository.findAll().map { paymentMapper.paymentToPaymentResponse(it) }
+        return res
     }
 }

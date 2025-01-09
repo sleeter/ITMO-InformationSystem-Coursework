@@ -18,10 +18,7 @@ class PaymentController(
 ) {
     @GetMapping
     fun getPayments(
-        @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "10") size: Int,
-    ): ResponseEntity<Page<PaymentResponse>> {
-        val pageable: Pageable = PageRequest.of(page, size)
-        return ResponseEntity.ok(paymentService.getPayments(pageable))
+    ): ResponseEntity<List<PaymentResponse>> {
+        return ResponseEntity.ok(paymentService.getPayments())
     }
 }

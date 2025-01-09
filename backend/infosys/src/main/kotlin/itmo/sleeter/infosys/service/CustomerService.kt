@@ -17,8 +17,8 @@ class CustomerService(
     fun getCustomer(id: Long): Customer {
         return customerRepository.findById(id).get()
     }
-    fun getCustomers(pageable: Pageable): Page<CustomerResponse> {
-        val page = customerRepository.findAll(pageable).map { customerMapper.customerToCustomerResponse(it) }
-        return PageImpl(page.content, pageable, page.totalElements)
+    fun getCustomers(): List<CustomerResponse> {
+        val res = customerRepository.findAll().map { customerMapper.customerToCustomerResponse(it) }
+        return res
     }
 }

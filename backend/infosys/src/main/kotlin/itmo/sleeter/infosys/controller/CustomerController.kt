@@ -18,10 +18,7 @@ class CustomerController(
 ) {
     @GetMapping
     fun getCustomers(
-        @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "10") size: Int,
-    ): ResponseEntity<Page<CustomerResponse>> {
-        val pageable: Pageable = PageRequest.of(page, size)
-        return ResponseEntity.ok(customerService.getCustomers(pageable))
+    ): ResponseEntity<List<CustomerResponse>> {
+        return ResponseEntity.ok(customerService.getCustomers())
     }
 }
