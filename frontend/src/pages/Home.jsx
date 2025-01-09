@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import OrderTable from "../tables/OrderTable.jsx";
 import {useState} from "react";
+import OrderForm from "../forms/OrderForm.jsx";
 
 function Home() {
     const [editingUser, setEditingUser] = useState(null);
@@ -98,6 +99,9 @@ function Home() {
 
             <h2>Order table</h2>
             <OrderTable/>
+
+            <h2>Order form</h2>
+            <OrderForm/>
 
             {editingUser && (
                 <div style={modalStyles.overlay}>
