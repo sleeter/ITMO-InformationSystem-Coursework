@@ -3,6 +3,7 @@ import { useState } from 'react';
 const OrderForm = () => {
     // Состояние для опций для селекта
     const [options, setOptions] = useState([]);
+    const [paymentMethod, setPaymentMethod] = useState('card'); // Добавляем состояние для способа оплаты
 
     const jwtToken = localStorage.getItem('jwtToken');
 
@@ -59,9 +60,51 @@ const OrderForm = () => {
         setRows(updatedRows);
     };
 
+    // Обработчик изменения выбранного способа оплаты
+    const handlePaymentMethodChange = (e) => {
+        setPaymentMethod(e.target.value);
+    };
+
     // Обработчик отправки формы
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        let products = [];
+        rows.forEach((row, i) => {
+            // Для каждого элемента в rows создаём объект в products
+            products[i] = {
+                product_id: parseInt(row.selectedOption, 10), // Преобразуем selectedOption в число
+                count: row.quantity // Приравниваем количество
+            };
+        });
+
+        const customer_id = 0; // Пример customer_id
+
+        let size = 0;
+        let total_price = 0;
+
+        products.forEach((product) => {
+            // Находим соответствующий элемент в options
+            const option = options.find(o => o.id === product.product_id);
+
+            if (option) {  // Если найдено совпадение
+                // Увеличиваем size и total_price
+                size += option.size * product.count;
+                total_price += option.price * product.count;
+            }
+        });
+
+        const pick_up_point_id = 0; // Пример pick_up_point_id
+        let payment_id = paymentMethod === 'card' ? 1 : 0; // Соответствующее значение для способа оплаты
+
+        console.log(JSON.stringify({
+            customer_id: customer_id,
+            size: size,
+            pick_up_point_id: pick_up_point_id,
+            total_price: total_price,
+            payment_id: payment_id,
+            products: products
+        }));
 
         // Отправка данных на сервер
         try {
@@ -71,7 +114,14 @@ const OrderForm = () => {
                     'Authorization': `Bearer ${jwtToken}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(rows),
+                body: JSON.stringify({
+                    customer_id: customer_id,
+                    size: size,
+                    pick_up_point_id: pick_up_point_id,
+                    total_price: total_price,
+                    payment_id: payment_id,
+                    products: products
+                }),
             });
 
             if (response.ok) {
@@ -92,14 +142,12 @@ const OrderForm = () => {
                         <select
                             value={row.selectedOption}
                             onChange={(e) => handleSelectChange(e, index)}
-                            style={{marginRight: '10px'}}
+                            style={{ marginRight: '10px' }}
                         >
-                            {/*<option value="">Select an option</option>*/}
+                            <option value="">Select an option</option>
                             {options.map((option, i) => (
-                                // Предположим, что 'option' — это объект с полем 'name'
-                                <option key={i}
-                                        value={option.id}> {/* Здесь id, но можно использовать другой уникальный ключ */}
-                                    {option.name} {/* Здесь мы отображаем свойство объекта */}
+                                <option key={i} value={option.id}>
+                                    {option.name}
                                 </option>
                             ))}
                         </select>
@@ -109,7 +157,7 @@ const OrderForm = () => {
                             value={row.quantity}
                             onChange={(e) => handleQuantityChange(e, index)}
                             min="1"
-                            style={{marginRight: '10px', width: '80px'}}
+                            style={{ marginRight: '10px', width: '80px' }}
                         />
 
                         <button type="button" onClick={() => removeRow(index)}>-</button>
@@ -119,6 +167,19 @@ const OrderForm = () => {
                 <button type="button" onClick={addRow}>
                     +
                 </button>
+
+                {/* Добавляем новый селект для выбора способа оплаты */}
+                <div style={{ marginTop: '20px' }}>
+                    <label htmlFor="paymentMethod">Payment Method: </label>
+                    <select
+                        id="paymentMethod"
+                        value={paymentMethod}
+                        onChange={handlePaymentMethodChange}
+                    >
+                        <option value="card">Card</option>
+                        <option value="cash">Cash</option>
+                    </select>
+                </div>
 
                 <div style={{ marginTop: '20px' }}>
                     <button type="submit">Submit Order</button>
