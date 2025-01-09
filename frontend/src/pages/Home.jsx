@@ -22,7 +22,6 @@ function Home() {
         const jwtToken = localStorage.getItem('jwtToken');
         const decodedToken = JSON.parse(atob(jwtToken.split('.')[1]));
         const id = decodedToken.id;
-        console.log(id)
         try {
             const response = await fetch(`http://localhost:8080/api/employee/${id}`, {
                 method: 'GET',
@@ -50,8 +49,8 @@ function Home() {
 
         const jwtToken = localStorage.getItem('jwtToken');
         try {
-            const response = await fetch(`http://localhost:8080/api/coord/${editingUser.id}`, {
-                method: 'PUT',
+            const response = await fetch(`http://localhost:8080/api/employee/update/${editingUser.id}`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${jwtToken}`,
@@ -92,7 +91,7 @@ function Home() {
                     <div>
                         <button onClick={handleLogout}>Logout</button>
                         <button onClick={() => fetchUserDetails()}>Edit profile</button>
-                        <button onClick={handleGoToAdminPanel}>Go to admin panel</button>
+                        {role === 'ROLE_admin' && (<button onClick={handleGoToAdminPanel}>Go to admin panel</button>)}
                     </div>
                 </header>
             </div>
@@ -110,14 +109,6 @@ function Home() {
                                 type="text"
                                 value={editingUser.login}
                                 onChange={(e) => setEditingUser({...editingUser, login: e.target.value})}
-                            />
-                        </label>
-                        <label>
-                            Password:
-                            <input
-                                type="password"
-                                value={editingUser.password}
-                                onChange={(e) => setEditingUser({...editingUser, password: e.target.value})}
                             />
                         </label>
                         <label>
