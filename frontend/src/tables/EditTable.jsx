@@ -37,6 +37,48 @@ const EditTable = () => {
         fetchUsers(currentPage);
     }, [currentPage]);
 
+    const handleAccept = async (id) => {
+        const approved = true
+        const jwtToken = localStorage.getItem('jwtToken');
+        try {
+            const response = await fetch(`http://localhost:8080/api/admin/employee/edit/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(approved),
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при принятии заявки');
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const handleReject = async (id) => {
+        const approved = false
+        const jwtToken = localStorage.getItem('jwtToken');
+        try {
+            const response = await fetch(`http://localhost:8080/api/admin/employee/edit/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(approved),
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при отказе заявки');
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
     const handleNext = () => {
         if (currentPage < totalPages - 1) {
             setCurrentPage(currentPage + 1);
