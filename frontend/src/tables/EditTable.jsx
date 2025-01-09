@@ -37,42 +37,19 @@ const EditTable = () => {
         fetchUsers(currentPage);
     }, [currentPage]);
 
-    const handleAccept = async (id) => {
-        const approved = true
+    const handle = async (id, approved) => {
         const jwtToken = localStorage.getItem('jwtToken');
         try {
-            const response = await fetch(`http://localhost:8080/api/admin/employee/edit/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/admin/employee/edit/${id}?approved=${approved}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${jwtToken}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(approved),
             });
 
             if (!response.ok) {
                 throw new Error('Ошибка при принятии заявки');
-            }
-        } catch (error) {
-            alert(error.message);
-        }
-    };
-
-    const handleReject = async (id) => {
-        const approved = false
-        const jwtToken = localStorage.getItem('jwtToken');
-        try {
-            const response = await fetch(`http://localhost:8080/api/admin/employee/edit/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${jwtToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(approved),
-            });
-
-            if (!response.ok) {
-                throw new Error('Ошибка при отказе заявки');
             }
         } catch (error) {
             alert(error.message);
@@ -125,10 +102,10 @@ const EditTable = () => {
                             <td>{user.before.pick_up_point_id}</td>
                             <td>{user.after.pick_up_point_id}</td>
                             <td>
-                                <button onClick={() => handleAccept(user.before.id)}>Accept</button>
+                                <button onClick={() => handle(user.before.id, true)}>Accept</button>
                             </td>
                             <td>
-                                <button onClick={() => handleReject(user.before.id)}>Reject</button>
+                                <button onClick={() => handle(user.before.id, false)}>Reject</button>
                             </td>
                         </tr>
                     ))}
