@@ -25,6 +25,11 @@ class UserController(
         return ResponseEntity.ok(userService.getUsers(pageable))
     }
 
+    @GetMapping("/{id}")
+    fun getUserById(@PathVariable id: Long): ResponseEntity<UserResponse> {
+        return ResponseEntity.ok(userService.getUserById(id))
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_admin')")
     fun addNewEmployee(@RequestBody @Valid req: UserRequest): ResponseEntity<UserResponse> {

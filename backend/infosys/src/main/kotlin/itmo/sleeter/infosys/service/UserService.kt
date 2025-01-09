@@ -78,7 +78,12 @@ class UserService(
 
         return PageImpl(userResponses, pageable, usersPage.totalElements)
     }
-
+    fun getUserById(id: Long) : UserResponse {
+        val user = userRepository.findById(id).orElseThrow {
+            EntityNotFoundException("User with id=$id not found")
+        }
+        return userMapper.userToUserResponse(user)
+    }
     fun updateUser(id: Long, req: UserRequest) {
         val updateUser = UserUpdate()
         updateUser.id = id
