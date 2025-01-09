@@ -18,10 +18,7 @@ class StatusController(
 ){
     @GetMapping
     fun getStatuses(
-        @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "10") size: Int,
-    ): ResponseEntity<Page<StatusResponse>> {
-        val pageable: Pageable = PageRequest.of(page, size)
-        return ResponseEntity.ok(service.getStatuses(pageable))
+    ): ResponseEntity<List<StatusResponse>> {
+        return ResponseEntity.ok(service.getStatuses())
     }
 }

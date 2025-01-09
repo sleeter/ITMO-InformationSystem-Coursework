@@ -17,8 +17,8 @@ class StatusService(
     fun getStatus(statusId: Long): Status {
         return statusRepository.findById(statusId).get()
     }
-    fun getStatuses(pageable: Pageable): Page<StatusResponse> {
-        val page = statusRepository.findAll(pageable).map { statusMapper.statusToStatusResponse(it) }
-        return PageImpl(page.content, pageable, page.totalElements)
+    fun getStatuses(): List<StatusResponse> {
+        val res = statusRepository.findAll().map { statusMapper.statusToStatusResponse(it) }
+        return res
     }
 }
