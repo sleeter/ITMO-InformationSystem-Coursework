@@ -18,10 +18,6 @@ class PickupPoint {
     @Column(name = "address", nullable = false, length = 50)
     var address: String? = null
 
-    @NotNull
-    @Column(name = "capacity", nullable = false)
-    var capacity: Int? = null
-
     @ColumnDefault("0")
     @Column(name = "size")
     var size: Long? = null

@@ -1,6 +1,7 @@
 package itmo.sleeter.infosys.controller
 
 import itmo.sleeter.infosys.dto.request.UserRequest
+import itmo.sleeter.infosys.dto.request.UserUpdateRequest
 import itmo.sleeter.infosys.dto.response.UserResponse
 import itmo.sleeter.infosys.service.UserService
 import jakarta.validation.Valid
@@ -37,7 +38,7 @@ class UserController(
     }
 
     @PostMapping("/update/{id}")
-    fun updateEmployee(@PathVariable id: Long, @RequestBody @Valid req: UserRequest): ResponseEntity<Void> {
+    fun updateEmployee(@PathVariable id: Long, @RequestBody @Valid req: UserUpdateRequest): ResponseEntity<Void> {
         userService.updateUser(id, req)
         return ResponseEntity.ok().body(null)
     }

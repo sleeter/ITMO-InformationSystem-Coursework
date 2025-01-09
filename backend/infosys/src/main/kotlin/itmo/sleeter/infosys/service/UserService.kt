@@ -2,6 +2,7 @@ package itmo.sleeter.infosys.service
 
 import itmo.sleeter.infosys.dto.request.LoginRequest
 import itmo.sleeter.infosys.dto.request.UserRequest
+import itmo.sleeter.infosys.dto.request.UserUpdateRequest
 import itmo.sleeter.infosys.dto.response.CompareUsersResponse
 import itmo.sleeter.infosys.dto.response.TokenResponse
 import itmo.sleeter.infosys.dto.response.UserResponse
@@ -84,11 +85,10 @@ class UserService(
         }
         return userMapper.userToUserResponse(user)
     }
-    fun updateUser(id: Long, req: UserRequest) {
+    fun updateUser(id: Long, req: UserUpdateRequest) {
         val updateUser = UserUpdate()
         updateUser.id = id
         updateUser.login = req.login
-        updateUser.password = passwordEncoder.encode(req.password)
         updateUser.name = req.name
         updateUser.role = if (req.role == "admin") roleRepository.findById(0).get() else roleRepository.findById(1).get()
         updateUser.pickupPoint = if (req.pickUpPointId != null) pickupPointService.getPickupPointById(req.pickUpPointId) else null
@@ -104,7 +104,6 @@ class UserService(
             user.pickupPoint = updateUser.pickupPoint
             user.role = updateUser.role
             user.login = updateUser.login
-            user.setPassword(updateUser.password!!)
         } else {
             updateUser.approved = "declined"
         }

@@ -17,11 +17,6 @@ class UserUpdate {
     @Column(name = "login", nullable = false, length = 50)
     var login: String? = null
 
-    @Size(max = 100)
-    @NotNull
-    @Column(name = "password", nullable = false, length = 100)
-    var password: String? = null
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     var role: Role? = null
