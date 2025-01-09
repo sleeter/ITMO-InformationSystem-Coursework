@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class UserUpdateResponse(
     val login: String,
-    val password: String,
     val role: String,
     val name: String,
     @JsonProperty("pick_up_point_id")

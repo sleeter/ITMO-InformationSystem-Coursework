@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS pickup_points
 (
     id bigserial primary key,
     address varchar(50) not null,
-    capacity int not null,
     size bigint default 0 -- add trigger
 );
 CREATE TABLE IF NOT EXISTS users (
@@ -27,7 +26,6 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS users_updates (
     id bigint primary key,
     login varchar(50) not null unique,
-    password varchar(100) not null,
     role_id bigint references roles(id),
     name varchar(30) not null,
     pickup_points_id bigint references pickup_points(id),
