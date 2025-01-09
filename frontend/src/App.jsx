@@ -3,6 +3,7 @@ import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
 import Register from "./pages/Register.jsx";
 import Admin from "./pages/Admin.jsx";
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -11,8 +12,10 @@ function App() {
               <Routes>
                   <Route path="/auth/login" element={<Login />} />
                   <Route path="/auth/register" element={<Register />} />
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/home/admin" element={<Admin />} />
+                  <Route element={<ProtectedRoute />}>
+                      <Route path="/home" element={<Home />} />
+                      <Route path="/home/admin" element={<Admin />} />
+                  </Route>
                   <Route path="/" element={<Login />} />
               </Routes>
           </div>

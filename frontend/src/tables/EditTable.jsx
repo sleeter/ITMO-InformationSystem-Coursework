@@ -125,10 +125,10 @@ const EditTable = () => {
                             <td>{user.before.pick_up_point_id}</td>
                             <td>{user.after.pick_up_point_id}</td>
                             <td>
-                                <button onClick={() => handleAccept(user.id)}>Accept</button>
+                                <button onClick={() => handleAccept(user.before.id)}>Accept</button>
                             </td>
                             <td>
-                                <button onClick={() => handleReject(user.id)}>Reject</button>
+                                <button onClick={() => handleReject(user.before.id)}>Reject</button>
                             </td>
                         </tr>
                     ))}
