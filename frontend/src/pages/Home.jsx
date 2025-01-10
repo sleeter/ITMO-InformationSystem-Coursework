@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import OrderTable from "../tables/OrderTable.jsx";
 import {useState} from "react";
 import OrderForm from "../forms/OrderForm.jsx";
+import QRScanner from "../features/QRScanner.jsx";
 
 function Home() {
     const [editingUser, setEditingUser] = useState(null);
@@ -102,6 +103,9 @@ function Home() {
 
             <h2>Order form</h2>
             <OrderForm/>
+
+            <h2>QR scanner</h2>
+            <QRScanner/>
 
             {editingUser && (
                 <div style={modalStyles.overlay}>
