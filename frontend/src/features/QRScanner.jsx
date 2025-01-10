@@ -20,19 +20,18 @@ function QRScanner() {
             }
         };
 
-        const qrCodeSuccess = (decodedText) => {
+        const qrCodeSuccess = async (decodedText) => {
             setQrMessage(decodedText);
 
             const jwtToken = localStorage.getItem('jwtToken'); // Получаем JWT из localStorage
             try {
-                const response = fetch(decodedText, {
+                const response = await fetch(decodedText, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${jwtToken}`,
                         'Content-Type': 'application/json'
                     }
                 });
-
                 if (!response.ok) {
                     throw new Error('Ошибка при загрузке данных');
                 }
