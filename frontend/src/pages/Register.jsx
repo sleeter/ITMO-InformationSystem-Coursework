@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 function Register() {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('')
+    const [role, setRole] = useState('employee')
     const [name, setName] = useState('')
     const [pick_up_point_id, setPickUpPointId] = useState('')
     const navigate = useNavigate();
@@ -43,12 +43,6 @@ function Register() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-            />
-            <input
-                type="text"
-                placeholder="Role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
             />
             <input
                 type="text"

@@ -3,7 +3,7 @@ import { useState } from 'react';
 const OrderForm = () => {
     // Состояние для опций для селекта
     const [options, setOptions] = useState([]);
-    const [paymentMethod, setPaymentMethod] = useState('card'); // Добавляем состояние для способа оплаты
+    const [paymentMethod, setPaymentMethod] = useState('cash'); // Добавляем состояние для способа оплаты
 
     const jwtToken = localStorage.getItem('jwtToken');
 

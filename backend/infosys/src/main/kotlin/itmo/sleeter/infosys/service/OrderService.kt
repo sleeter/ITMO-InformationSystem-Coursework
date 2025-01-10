@@ -80,6 +80,6 @@ class OrderService(
                 opr
             )
         }
-        return PageImpl(page.content, pageable, page.totalElements)
+        return PageImpl(page.content.sortedBy { it.id }, pageable, page.totalElements)
     }
 }
