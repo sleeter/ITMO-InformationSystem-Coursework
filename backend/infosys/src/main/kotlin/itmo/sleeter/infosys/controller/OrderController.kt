@@ -7,23 +7,28 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("api/order")
 class OrderController(
-    private val orderService: OrderService
+    private val orderService: OrderService,
+    private val simpMessagingTemplate: SimpMessagingTemplate,
 ) {
     @PostMapping
     @Transactional
     fun createOrder(@RequestBody orderRequest: OrderRequest): ResponseEntity<OrderResponse> {
-        return ResponseEntity.ok(orderService.createOrder(orderRequest))
+        val resp = orderService.createOrder(orderRequest)
+        simpMessagingTemplate.convertAndSend("/topic/app", "")
+        return ResponseEntity.ok(resp)
     }
 
     @PutMapping("/status/{id}")
     fun updateOrderStatus(@PathVariable id: Long, @RequestParam status: Long): ResponseEntity<Void> {
         orderService.updateOrderStatus(id, status)
+        simpMessagingTemplate.convertAndSend("/topic/app", "")
         return ResponseEntity.ok(null)
     }
 

@@ -9,13 +9,15 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("api/employee")
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val simpMessagingTemplate: SimpMessagingTemplate,
 ) {
     @GetMapping
     fun getEmployees(
@@ -34,7 +36,9 @@ class UserController(
     @PostMapping
     @PreAuthorize("hasRole('ROLE_admin')")
     fun addNewEmployee(@RequestBody @Valid req: UserRequest): ResponseEntity<UserResponse> {
-        return ResponseEntity.ok(userService.createUser(req))
+        val resp = userService.createUser(req)
+        simpMessagingTemplate.convertAndSend("/topic/app", "")
+        return ResponseEntity.ok(resp)
     }
 
     @PostMapping("/update/{id}")

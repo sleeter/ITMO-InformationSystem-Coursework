@@ -1,10 +1,32 @@
 import { useEffect, useState } from 'react';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 
 const OrderTable = () => {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        connectWebSocket(currentPage)
+    }, [currentPage])
+
+    const jwtToken = localStorage.getItem('jwtToken');
+
+    function connectWebSocket(currentPage) {
+        const socket = new SockJS("http://localhost:8080/ws")
+        let stompClient = Stomp.over(socket)
+
+        stompClient.connect({
+            // Заголовки для подключения
+            Authorization: `Bearer ${jwtToken}`,  // Передаем Bearer токен
+        }, function () {
+            stompClient.subscribe('/topic/app', data => {
+                fetchOrders(currentPage)
+            })
+        })
+    }
 
     //TODO: поменять на веб сокет
     const fetchOrders = async (page) => {
