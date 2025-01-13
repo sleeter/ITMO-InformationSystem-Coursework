@@ -6,7 +6,7 @@ function Register() {
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('employee')
     const [name, setName] = useState('')
-    const [pick_up_point_id, setPickUpPointId] = useState('')
+    const [pick_up_point_id, setPickUpPointId] = useState(0)
     const navigate = useNavigate();
     const deleted = false
 
@@ -50,12 +50,13 @@ function Register() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />
-            <input
-                type="number"
-                placeholder="Pick up point id"
+            <select
                 value={pick_up_point_id}
-                onChange={(e) => setPickUpPointId(e.target.value)}
-            />
+                onChange={(e) => setPickUpPointId(Number(e.target.value))} // Convert to number
+            >
+                <option value={0}>Pick-up Point 0</option>
+                <option value={1}>Pick-up Point 1</option>
+            </select>
             <button onClick={handleRegister}>Register</button>
             <p>
                 Already have an account? <a href="/auth/login">Login</a>

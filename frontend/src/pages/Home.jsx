@@ -137,11 +137,17 @@ function Home() {
                         </label>
                         <label>
                             Pick up point id:
-                            <input
-                                type="number"
-                                value={editingUser.number}
-                                onChange={(e) => setEditingUser({...editingUser, pick_up_point_id: e.target.value})}
-                            />
+                            <select
+                                value={editingUser.pick_up_point_id}
+                                onChange={(e) => setEditingUser({
+                                    ...editingUser,
+                                    pick_up_point_id: Number(e.target.value)
+                                })} // Convert to number
+                            >
+                                <option value={0}>Pick-up Point 0</option>
+                                <option value={1}>Pick-up Point 1</option>
+                            </select>
+
                         </label>
                         <button type="button" onClick={handleEditSubmit}>
                             Save changes
